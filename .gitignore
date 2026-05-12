@@ -1,0 +1,22 @@
+# ============================================================
+# .GITIGNORE — Projet Sécurisation Tenant PME BTP
+# Fichiers exclus du versioning GitHub
+# ============================================================
+
+# Terraform — fichiers sensibles et générés automatiquement
+# terraform.tfvars contient les IDs de subscription → jamais sur GitHub
+**/*.tfvars
+**/.terraform/
+**/*.tfstate
+**/*.tfstate.backup
+**/.terraform.lock.hcl
+# Plans Terraform — fichiers binaires générés, jamais sur GitHub
+**/tfplan*
+# Ancien main.tf à la racine du dossier terraform — orphelin
+terraform/main.tf
+
+# VSCode — paramètres locaux non pertinents pour le projet
+.vscode/
+
+# Logs
+*.log
