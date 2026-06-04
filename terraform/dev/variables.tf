@@ -31,3 +31,24 @@ variable "user_password" {
   type        = string
   sensitive   = true
 }
+# ============================================================
+# RBAC — Object IDs des users Entra ID
+# Récupérés via : az ad user list
+# Utilisés pour assigner les rôles RBAC aux bons utilisateurs
+# Ne jamais hardcoder ces IDs dans rbac.tf — toujours via variables
+# ============================================================
+
+variable "alice_object_id" {
+  description = "Object ID Entra ID de Alice Martin — Contributor"
+  type        = string
+}
+
+variable "bob_object_id" {
+  description = "Object ID Entra ID de Bob Dupont — Reader"
+  type        = string
+}
+
+variable "claire_object_id" {
+  description = "Object ID Entra ID de Claire Durand — Billing Reader"
+  type        = string
+}
