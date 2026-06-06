@@ -1,70 +1,68 @@
-# 🔐 Sécurisation Tenant Azure — PME BTP
+# 🔐 Azure Tenant Security — SMB Use Case
 
-> **Projet freelance simulé** — Mission type : sécurisation d'un tenant Microsoft 365 / Azure pour une PME BTP de 60 personnes (Centre-Val de Loire) suite à une tentative d'intrusion.
+> **Simulated freelance project** — Mission type: securing a Microsoft 365 / Azure tenant 
+> for a 60-person construction company (Centre-Val de Loire) following an intrusion attempt.
 
 ---
 
-## 🎯 Contexte client
+## 🎯 Client Context
 
 | | |
 |---|---|
-| **Secteur** | BTP — 60 collaborateurs |
-| **Région** | Centre-Val de Loire, France |
-| **Problème** | Tentative d'intrusion sur Microsoft 365 — accès non sécurisés |
-| **Besoin** | MFA obligatoire, blocage hors France, gouvernance des accès |
-| **TJM mission** | 650–900 € / jour |
+| **Industry** | Construction — 60 employees |
+| **Region** | Centre-Val de Loire, France |
+| **Problem** | Intrusion attempt on Microsoft 365 — unsecured access |
+| **Need** | Mandatory MFA, geo-blocking outside France, access governance |
+| **Daily rate** | €650–900 / day |
 
 ---
 
-## ✅ Livrables réalisés
+## ✅ Deliverables
 
-| Livrable | Technologie | Statut |
+| Deliverable | Technology | Status |
 |---|---|---|
-| Utilisateurs Entra ID (Alice, Bob, Claire) | Terraform | ✅ |
-| Groupes de sécurité (Leaders, Employees) | Terraform | ✅ |
+| Entra ID users (Alice, Bob, Claire) | Terraform | ✅ |
+| Security groups (Leaders, Employees) | Terraform | ✅ |
 | RBAC Contributor / Reader / Billing Reader | Terraform | ✅ |
-| Conditional Access — MFA obligatoire | Terraform | ✅ |
-| Conditional Access — Blocage hors France | Terraform | ✅ |
+| Conditional Access — Mandatory MFA | Terraform | ✅ |
+| Conditional Access — Geo-blocking outside France | Terraform | ✅ |
 | Named Location "France" | Terraform | ✅ |
-| Infrastructure as Code versionnée | Git + GitHub | ✅ |
+| Versioned Infrastructure as Code | Git + GitHub | ✅ |
 
 ---
 
-## 🏗️ Stack technique
-
-```
+## 🏗️ Tech Stack
 Terraform · Azure CLI · Entra ID · Git · GitHub · VSCode
-```
 
 ---
 
-## 📁 Structure du projet
+## 📁 Project Structure
 
-![Arborescence fichiers Terraform](portal-screenshots/Arborescence%20fichiers.tf.png)
-
----
-
-## 👥 Gouvernance des identités
-
-### Groupes de sécurité
-
-**PME-BTP-Leaders** (Direction + Management)
-
-![Membres groupe Leaders](portal-screenshots/Membre%20groupe%20Leadres.png)
-
-**PME-BTP-Employees** (Collaborateurs)
-
-![Membres groupe Employees](portal-screenshots/membres_groupe_emplyées.png)
+![Terraform file tree](portal-screenshots/Arborescence%20fichiers.tf.png)
 
 ---
 
-## 🔑 RBAC — Contrôle d'accès par rôle
+## 👥 Identity Governance
 
-| Utilisateur | Rôle | Périmètre |
+### Security Groups
+
+**PME-BTP-Leaders** (Management)
+
+![Leaders group members](portal-screenshots/Membre%20groupe%20Leadres.png)
+
+**PME-BTP-Employees** (Staff)
+
+![Employees group members](portal-screenshots/membres_groupe_emplyées.png)
+
+---
+
+## 🔑 RBAC — Role-Based Access Control
+
+| User | Role | Scope |
 |---|---|---|
-| Alice Martin | Contributeur | Subscription |
-| Bob Dupont | Lecteur | Resource Group |
-| Claire Durand | Lecteur de facturation | Subscription |
+| Alice Martin | Contributor | Subscription |
+| Bob Dupont | Reader | Resource Group |
+| Claire Durand | Billing Reader | Subscription |
 
 ![RBAC Assignments](portal-screenshots/RBAC-%20Contributor%20-Reader%20-Billing%20Reader.png)
 
@@ -72,13 +70,13 @@ Terraform · Azure CLI · Entra ID · Git · GitHub · VSCode
 
 ## 🛡️ Conditional Access
 
-Deux politiques actives — zéro Security Defaults, gouvernance complète par Conditional Access.
+Two active policies — no Security Defaults, full governance via Conditional Access.
 
 ![Conditional Access Policies](portal-screenshots/Conditional%20Access.png)
 
 ### Named Location — France
 
-Seules les connexions depuis la France sont autorisées.
+Only connections from France are allowed.
 
 ![Named Location France](portal-screenshots/Named%20Locations.png)
 
@@ -86,34 +84,31 @@ Seules les connexions depuis la France sont autorisées.
 
 ## 🗂️ Infrastructure as Code
 
-Toute l'infrastructure est définie en Terraform, versionnée sur GitHub, reproductible en 2 minutes.
-
-```
+All infrastructure is defined in Terraform, versioned on GitHub, reproducible in 2 minutes.
 terraform/dev/
-├── main.tf                  # Provider AzureRM + AzureAD
-├── variables.tf             # Variables externalisées
-├── entra-id.tf              # Users + Groupes
-├── rbac.tf                  # Assignments RBAC
-├── conditional-access.tf    # Policies CA + Named Location
-└── outputs.tf               # 9 outputs exposés
-```
+├── main.tf                  # AzureRM + AzureAD providers
+├── variables.tf             # Externalized variables
+├── entra-id.tf              # Users + Groups
+├── rbac.tf                  # RBAC assignments
+├── conditional-access.tf    # CA policies + Named Location
+└── outputs.tf               # 9 exposed outputs
 
 ---
 
-## 💡 Valeur livrée au client
+## 💡 Business Value Delivered
 
-| Action technique | Valeur métier |
+| Technical action | Business value |
 |---|---|
-| Users nominatifs + groupes | Conformité RGPD — chaque accès tracé |
-| MFA obligatoire | Blocage 99% des attaques par credential stuffing |
-| Blocage hors France | Réduction surface d'attaque géographique |
-| Code Terraform versionné | Disaster recovery en 2 minutes |
-| Git history propre | Audit trail — qui a changé quoi et quand |
+| Named users + groups | GDPR compliance — every access traced |
+| Mandatory MFA | Blocks 99% of credential stuffing attacks |
+| Geo-blocking outside France | Reduced attack surface |
+| Versioned Terraform code | Disaster recovery in 2 minutes |
+| Clean Git history | Audit trail — who changed what and when |
 
 ---
 
-## 👤 Auteur
+## 👤 Author
 
-**Nabil Bouhaigoun** — Consultant Azure Freelance  
+**Nabil Bouhaigoun** — Azure Freelance Consultant  
 📍 Orléans, France  
 🔗 [Malt](#) · [LinkedIn](#) · [GitHub](https://github.com/bouhaigoun/projet-pme-btp)
