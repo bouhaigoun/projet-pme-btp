@@ -11,35 +11,32 @@
 # CA-01 — MFA obligatoire tous users PME BTP
 # Contexte : vague cyberattaques PME BTP 2023-2024
 # Sans MFA = 80% des compromissions de compte évitables
+# Exclusion Break Glass : compte d'urgence DSI — jamais soumis au MFA
+# Piège terrain : Break Glass doit être exclu AVANT activation CA
 # ============================================================
 resource "azuread_conditional_access_policy" "require_mfa" {
   display_name = "CA-01-PME-BTP-Require-MFA"
   state        = "enabled"
-
   conditions {
-    # Appliqué à tous les users du tenant
     users {
       included_users = ["All"]
+      # Break Glass exclu — accès d'urgence non bloqué
+      # Règle senior : TOUJOURS exclure Break Glass de toutes les CA policies
+      excluded_users = [var.break_glass_object_id]
     }
-    # Appliqué à toutes les applications cloud
     applications {
       included_applications = ["All"]
     }
-    # Toutes les plateformes (mobile, desktop, web)
     platforms {
       included_platforms = ["all"]
     }
-    # Toutes les localisations
     locations {
       included_locations = ["All"]
     }
     client_app_types = ["all"]
   }
-
   grant_controls {
-    # Opérateur OR = au moins un contrôle requis
     operator          = "OR"
-    # MFA obligatoire
     built_in_controls = ["mfa"]
   }
 }
@@ -51,11 +48,8 @@ resource "azuread_conditional_access_policy" "require_mfa" {
 # ============================================================
 resource "azuread_named_location" "france" {
   display_name = "France"
-
   country {
-    # Code ISO France
     countries_and_regions                 = ["FR"]
-    # Inclut les IPs inconnues comme hors France
     include_unknown_countries_and_regions = false
   }
 }
@@ -64,14 +58,17 @@ resource "azuread_named_location" "france" {
 # CA-02 — Bloquer accès hors France
 # Contexte : PME BTP française, aucun besoin d'accès international
 # Réduit drastiquement la surface d'attaque
+# Exclusion Break Glass : le DSI peut intervenir depuis n'importe où
+# en cas d'urgence (ex : cyberattaque depuis l'étranger)
 # ============================================================
 resource "azuread_conditional_access_policy" "block_outside_france" {
   display_name = "CA-02-PME-BTP-Block-Outside-France"
   state        = "enabled"
-
   conditions {
     users {
       included_users = ["All"]
+      # Break Glass exclu — DSI doit pouvoir accéder depuis n'importe où
+      excluded_users = [var.break_glass_object_id]
     }
     applications {
       included_applications = ["All"]
@@ -79,17 +76,14 @@ resource "azuread_conditional_access_policy" "block_outside_france" {
     platforms {
       included_platforms = ["all"]
     }
-    # Appliqué à toutes les localisations SAUF France
     locations {
       included_locations = ["All"]
       excluded_locations = [azuread_named_location.france.id]
     }
     client_app_types = ["all"]
   }
-
   grant_controls {
     operator          = "OR"
-    # Bloquer l'accès
     built_in_controls = ["block"]
   }
 }

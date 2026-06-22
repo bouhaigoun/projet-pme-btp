@@ -52,3 +52,22 @@ variable "claire_object_id" {
   description = "Object ID Entra ID de Claire Durand — Billing Reader"
   type        = string
 }
+variable "tenant_id" {
+  description = "ID du tenant Entra ID PME-BTP"
+  type        = string
+}
+
+variable "break_glass_object_id" {
+  description = "Object ID du compte Break Glass — exclu de toutes les CA policies"
+  type        = string
+}
+
+variable "consultant_email" {
+  description = "Email du consultant Nabil — tag owner sur les ressources"
+  type        = string
+}
+
+variable "cost_center" {
+  description = "Centre de coût de la mission PME-BTP"
+  type        = string
+}

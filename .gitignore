@@ -1,17 +1,21 @@
 # ============================================================
 # .GITIGNORE — Projet Sécurisation Tenant PME BTP
-# Fichiers exclus du versioning GitHub
+# Responsable RGPD : Nabil Bouhaigoun (consultant externe)
+# Toute donnée sensible client = jamais sur GitHub
 # ============================================================
 
-# Terraform — fichiers sensibles et générés automatiquement
-# terraform.tfvars contient les IDs de subscription → jamais sur GitHub
+# Terraform — fichiers contenant données sensibles client
+# terraform.tfvars : subscription IDs, object IDs, emails, passwords,
+# client_secret SP, tenant ID → JAMAIS sur GitHub (RGPD + sécurité)
 **/*.tfvars
 **/.terraform/
 **/*.tfstate
 **/*.tfstate.backup
 **/.terraform.lock.hcl
+
 # Plans Terraform — fichiers binaires générés, jamais sur GitHub
 **/tfplan*
+
 # Ancien main.tf à la racine du dossier terraform — orphelin
 terraform/main.tf
 
@@ -20,3 +24,9 @@ terraform/main.tf
 
 # Logs
 *.log
+
+# Secrets et credentials — jamais sur GitHub
+*.pem
+*.key
+*secret*
+*credential*
